@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0.45"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
+
+group 'org.imanity.framework'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+    maven { url 'https://maven.imanity.dev/repository/imanity-libraries/' }
+}
+
+aspectjBinary {
+    applyJavaPlugin = true
+    weaveClasses {
+        ajcSourceSets = [project.sourceSets.main]
+        source = '1.8'
+        target = '1.8'
+        additionalAjcParams = ['-proceedOnError']
+        writeToLog = true
+    }
+}
+
+dependencies {
+    compileOnly group: 'org.github.paperspigot', name: 'paperspigot', version: '1.8.8-R0.1-SNAPSHOT'
+    compileOnly group: 'org.imanity.framework', name: 'bukkit-core', version: '0.2-SNAPSHOT'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.0'
+
+    annotationProcessor group: 'org.imanity.framework', name: 'annotationProcessor', version: '0.1-SNAPSHOT'
+}
+
+test {
+    useJUnitPlatform()
+}
